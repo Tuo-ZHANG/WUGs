@@ -24,7 +24,15 @@ warnings.filterwarnings("ignore")
 import spacy
 nlp = spacy.load("en_core_web_sm")
 
-directory =os.makedirs( '/content/raw-c', exist_ok=True )
+# Get the current working directory
+cwd = os.getcwd()
+
+print(cwd)
+
+root_directory = cwd
+
+
+directory =os.makedirs( root_directory + '/raw-c', exist_ok=True )
 
 URL = "https://raw.githubusercontent.com/seantrott/raw-c/main/data/processed/raw-c.csv"
 download = requests.get(URL).content
@@ -119,9 +127,9 @@ for i in list(df_final["lemma"].value_counts().index):
   numpy_df = df_temp.to_numpy()
   header = list(df_temp.columns)
   numpy_df = np.vstack([header, numpy_df])
-  if not os.path.exists('/content/raw-c'+"/"+i):
-      os.mkdir('/content/raw-c'+"/"+i)
-  np.savetxt('/content/raw-c'+"/"+i+"/judgments.csv", numpy_df,fmt='%s', delimiter='\t')
+  if not os.path.exists(root_directory + '/raw-c'+"/"+i):
+      os.mkdir(root_directory + '/raw-c'+"/"+i)
+  np.savetxt(root_directory + '/raw-c'+"/"+i+"/judgments.csv", numpy_df,fmt='%s', delimiter='\t')
 
 df1 = df_final_next_stage[['lemma', 'sent1', 'class1', 'identifier1', 'index1']]
 df1.columns =  ['word', 'sent', 'pos', 'identifier', 'index']
@@ -200,9 +208,9 @@ for i in list(final_df["lemma"].value_counts().index):
   numpy_df = df_temp.to_numpy()
   header = list(df_temp.columns)
   numpy_df = np.vstack([header, numpy_df])
-  if not os.path.exists('/content/raw-c'+"/"+i):
-      os.mkdir('/content/raw-c'+"/"+i)
-  np.savetxt('/content/raw-c'+"/"+i+"/uses.csv", numpy_df,fmt='%s', delimiter='\t')
+  if not os.path.exists(root_directory + '/raw-c'+"/"+i):
+      os.mkdir(root_directory + '/raw-c'+"/"+i)
+  np.savetxt(root_directory + '/raw-c'+"/"+i+"/uses.csv", numpy_df,fmt='%s', delimiter='\t')
 
 #for i in list(final_df["lemma"].value_counts().index):
    # df_temp = final_df[final_df["lemma"]==i]
